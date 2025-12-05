@@ -17,7 +17,7 @@ const Hero = () => {
         <div className="max-w-3xl">
           <h1 id="hero-heading" className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal leading-[1.1] mb-6 text-surface-dark-foreground animate-fade-up">Deep Intelligence for Mineral Prospecting</h1>
           <p className="text-lg md:text-xl text-surface-dark-foreground/80 leading-relaxed mb-10 max-w-2xl animate-fade-up animation-delay-100">
-            Deep learning models that analyse geological, geophysical, and 
+            Machine learning models that analyse geological, geophysical, and 
             geochemical data to identify where mineral deposits are most 
             likely to occur.
           </p>
