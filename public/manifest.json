@@ -1,0 +1,23 @@
+{
+  "name": "MINML - AI-Powered Mineral Exploration",
+  "short_name": "MINML",
+  "description": "Discover high-value mineral targets with AI precision",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}
+

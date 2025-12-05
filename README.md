@@ -1,8 +1,10 @@
-# Welcome to your Lovable project
+# MINML - AI-Powered Mineral Exploration
+
+**Website**: [https://minml.co.uk](https://minml.co.uk)
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/09f6fad4-4d42-4cf0-8337-a1a4c8c9bb7e
+**Development URL**: https://lovable.dev/projects/09f6fad4-4d42-4cf0-8337-a1a4c8c9bb7e
 
 ## How can I edit this code?
 
