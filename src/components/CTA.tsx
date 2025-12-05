@@ -26,7 +26,7 @@ const CTA = () => {
           className="bg-primary text-primary-foreground hover:bg-primary/90"
           asChild
         >
-          <a href="mailto:demo@startup.com">
+          <a href="mailto:founders@minml.co.uk">
             Request a demo
             <ArrowRight className="h-4 w-4 ml-2" />
           </a>

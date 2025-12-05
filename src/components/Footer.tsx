@@ -47,7 +47,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#demo"
+                  href="mailto:founders@minml.co.uk"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Contact
