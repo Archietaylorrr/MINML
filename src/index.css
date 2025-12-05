@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Off-white / cream background */
+    --background: 40 20% 96%;
+    --foreground: 220 15% 12%;
+
+    --card: 40 20% 96%;
+    --card-foreground: 220 15% 12%;
+
+    --popover: 40 20% 96%;
+    --popover-foreground: 220 15% 12%;
+
+    /* Coral/terracotta accent */
+    --primary: 16 65% 55%;
+    --primary-foreground: 40 20% 96%;
+
+    --secondary: 40 15% 90%;
+    --secondary-foreground: 220 15% 12%;
+
+    --muted: 40 15% 88%;
+    --muted-foreground: 220 10% 45%;
+
+    --accent: 170 35% 45%;
+    --accent-foreground: 40 20% 96%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 40 20% 96%;
+
+    --border: 40 15% 85%;
+    --input: 40 15% 85%;
+    --ring: 16 65% 55%;
+
+    --radius: 0rem;
+
+    /* Dark surface for contrast sections */
+    --surface-dark: 200 25% 15%;
+    --surface-dark-foreground: 40 20% 96%;
+
+    /* Hex grid colors */
+    --hex-grid: 220 10% 80%;
+    --hex-highlight: 16 65% 55%;
+    --hex-teal: 170 35% 55%;
+    --hex-dark: 200 30% 20%;
+  }
+
+  .dark {
+    --background: 200 25% 10%;
+    --foreground: 40 20% 96%;
+
+    --card: 200 25% 12%;
+    --card-foreground: 40 20% 96%;
+
+    --popover: 200 25% 12%;
+    --popover-foreground: 40 20% 96%;
+
+    --primary: 16 65% 55%;
+    --primary-foreground: 40 20% 96%;
+
+    --secondary: 200 20% 18%;
+    --secondary-foreground: 40 20% 96%;
+
+    --muted: 200 20% 20%;
+    --muted-foreground: 40 10% 60%;
+
+    --accent: 170 35% 45%;
+    --accent-foreground: 40 20% 96%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 40 20% 96%;
+
+    --border: 200 20% 20%;
+    --input: 200 20% 20%;
+    --ring: 16 65% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-serif antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif tracking-tight;
+  }
+
+  /* Remove default focus ring, add custom */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply px-6 md:px-12 lg:px-24;
+  }
+
+  .container-narrow {
+    @apply max-w-5xl mx-auto;
+  }
+
+  .container-wide {
+    @apply max-w-7xl mx-auto;
+  }
+}
+
+@layer utilities {
+  /* Subtle fade in animation */
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  /* Hex pattern utilities */
+  .hex-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23c4bdb0' fill-opacity='0.25'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+}
