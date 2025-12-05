@@ -1,6 +1,6 @@
 name = "minml"
 compatibility_date = "2025-12-05"
 
-[site]
-bucket = "./dist"
+[assets]
+directory = "./dist"
 
