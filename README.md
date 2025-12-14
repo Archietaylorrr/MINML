@@ -1,75 +1,94 @@
-# MINML - AI-Powered Mineral Exploration
+# MINML
 
-**Website**: [https://minml.co.uk](https://minml.co.uk)
+**Deep Intelligence for Mineral Prospecting**
 
-## Project info
+[https://minml.co.uk](https://minml.co.uk)
 
-**Development URL**: https://lovable.dev/projects/09f6fad4-4d42-4cf0-8337-a1a4c8c9bb7e
+---
 
-## How can I edit this code?
+## Overview
 
-There are several ways of editing your application.
+MINML is an AI-powered mineral exploration platform that uses deep learning to identify where mineral deposits are most likely to occur. Our models analyse geological, geophysical, and geochemical data to generate prospectivity predictions with uncertainty estimates and feature attribution.
 
-**Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/09f6fad4-4d42-4cf0-8337-a1a4c8c9bb7e) and start prompting.
+## Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+| Category | Technology |
+|----------|------------|
+| Build Tool | [Vite](https://vitejs.dev/) |
+| Language | [TypeScript](https://www.typescriptlang.org/) |
+| Framework | [React 18](https://react.dev/) |
+| Styling | [Tailwind CSS](https://tailwindcss.com/) |
+| Components | [shadcn/ui](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/) |
+| Routing | [React Router](https://reactrouter.com/) |
+| Hosting | [Cloudflare Pages](https://pages.cloudflare.com/) |
 
-**Use your preferred IDE**
+## Development
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Node.js 18+ (recommended: install via [nvm](https://github.com/nvm-sh/nvm))
+- npm 9+
 
-Follow these steps:
+### Setup
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+# Clone the repository
+git clone https://github.com/your-org/minml-website.git
+cd minml-website
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Install dependencies
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The development server runs at `http://localhost:5173` with hot module replacement.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Scripts
 
-**Use GitHub Codespaces**
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Deployment
 
-## What technologies are used for this project?
+The site is deployed to Cloudflare Pages. Production builds are generated with:
 
-This project is built with:
+```bash
+npm run build
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Output is written to the `dist/` directory.
 
-## How can I deploy this project?
+## Project Structure
 
-Simply open [Lovable](https://lovable.dev/projects/09f6fad4-4d42-4cf0-8337-a1a4c8c9bb7e) and click on Share -> Publish.
+```
+src/
+├── assets/          # Static assets (images, icons)
+├── components/      # React components
+│   ├── ui/          # shadcn/ui component library
+│   ├── Header.tsx   # Site navigation
+│   ├── Hero.tsx     # Landing hero section
+│   ├── Features.tsx # Platform capabilities
+│   ├── About.tsx    # Company overview
+│   ├── HowItWorks.tsx # Workflow steps
+│   ├── CTA.tsx      # Demo request section
+│   └── Footer.tsx   # Site footer
+├── hooks/           # Custom React hooks
+├── pages/           # Route pages
+├── App.tsx          # Application root
+└── index.css        # Global styles
+```
 
-## Can I connect a custom domain to my Lovable project?
+## Contact
 
-Yes, you can!
+For demo requests and enquiries: [founders@minml.co.uk](mailto:founders@minml.co.uk)
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+© MINML. All rights reserved.
