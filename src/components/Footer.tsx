@@ -8,7 +8,8 @@ const Footer = () => {
     >
       <div className="container-wide">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          {/* Logo and copyright */}
+          
+          {/* Logo, copyright, contact */}
           <div>
             <p className="text-lg font-semibold text-foreground mb-2">
               MINML
@@ -16,6 +17,12 @@ const Footer = () => {
             <p className="text-sm text-muted-foreground">
               © {currentYear} MINML. All rights reserved.
             </p>
+            <a
+              href="mailto:founders@minml.co.uk"
+              className="mt-2 block text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              founders@minml.co.uk
+            </a>
           </div>
 
           {/* Links */}
@@ -55,6 +62,7 @@ const Footer = () => {
               </li>
             </ul>
           </nav>
+
         </div>
       </div>
     </footer>
