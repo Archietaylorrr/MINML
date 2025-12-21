@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ArrowRight } from "lucide-react";
 
 const navLinks = [
-  { label: "Platform", href: "#platform" },
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "About", href: "#about" },
+  { label: "Platform", href: "#platform", isAnchor: true },
+  { label: "Technology", href: "#technology", isAnchor: true },
+  { label: "About", href: "#about", isAnchor: true },
+  { label: "Team", href: "/team", isAnchor: false },
 ];
 
 // Minimalist hexagon logo icon
@@ -41,6 +43,9 @@ const HexLogo = ({ light = false }: { light?: boolean }) => (
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,13 +55,13 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isTransparent = !scrolled && !mobileMenuOpen;
+  const isTransparent = isHomePage && !scrolled && !mobileMenuOpen;
 
   return (
-    <header 
+    <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
-        isTransparent 
-          ? "bg-transparent border-b border-transparent" 
+        isTransparent
+          ? "bg-transparent border-b border-transparent"
           : "bg-background/90 backdrop-blur-md border-b border-border/50 shadow-sm"
       }`}
       style={{
@@ -70,8 +75,8 @@ const Header = () => {
         aria-label="Main navigation"
       >
         {/* Logo */}
-        <a
-          href="#"
+        <Link
+          to="/"
           className="flex items-center gap-3"
           aria-label="MINML Home"
         >
@@ -81,37 +86,91 @@ const Header = () => {
           }`}>
             MINML
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Navigation - All on the right */}
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className={`text-sm transition-colors ${
-                isTransparent 
-                  ? "text-surface-dark-foreground/80 hover:text-surface-dark-foreground" 
-                  : "text-foreground/80 hover:text-foreground"
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => 
+            link.isAnchor ? (
+              <a
+                key={link.href}
+                href={`/${link.href}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (isHomePage) {
+                    const element = document.querySelector(link.href);
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    navigate('/');
+                    setTimeout(() => {
+                      const element = document.querySelector(link.href);
+                      element?.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                  }
+                }}
+                className={`text-sm transition-colors hover:opacity-100 ${
+                  isTransparent
+                    ? "text-surface-dark-foreground/80 hover:text-surface-dark-foreground"
+                    : "text-foreground/80 hover:text-foreground"
+                }`}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                to={link.href}
+                className={`text-sm transition-colors hover:opacity-100 ${
+                  isTransparent
+                    ? "text-surface-dark-foreground/80 hover:text-surface-dark-foreground"
+                    : "text-foreground/80 hover:text-foreground"
+                } ${location.pathname === link.href ? 'font-medium' : ''}`}
+              >
+                {link.label}
+              </Link>
+            )
+          )}
           <a
-            href="#demo"
+            href="/#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              if (isHomePage) {
+                const element = document.querySelector('#contact');
+                element?.scrollIntoView({ behavior: 'smooth' });
+              } else {
+                navigate('/');
+                setTimeout(() => {
+                  const element = document.querySelector('#contact');
+                  element?.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+              }
+            }}
             className={`text-sm transition-colors underline underline-offset-4 ${
-              isTransparent 
-                ? "text-surface-dark-foreground/80 hover:text-surface-dark-foreground" 
+              isTransparent
+                ? "text-surface-dark-foreground/80 hover:text-surface-dark-foreground"
                 : "text-foreground/80 hover:text-foreground"
             }`}
           >
-            Request demo
+            Contact Us
           </a>
-          <Button variant={isTransparent ? "outline-light" : "icon"} size="icon" asChild>
-            <a href="#demo" aria-label="Request a demo">
-              <ArrowRight className="h-4 w-4" />
-            </a>
+          <Button 
+            variant={isTransparent ? "outline-light" : "icon"} 
+            size="icon" 
+            onClick={() => {
+              if (isHomePage) {
+                const element = document.querySelector('#contact');
+                element?.scrollIntoView({ behavior: 'smooth' });
+              } else {
+                navigate('/');
+                setTimeout(() => {
+                  const element = document.querySelector('#contact');
+                  element?.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+              }
+            }}
+            aria-label="Contact us"
+          >
+            <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
 
@@ -139,21 +198,63 @@ const Header = () => {
           className="md:hidden bg-background border-b border-border"
         >
           <div className="section-padding py-6 flex flex-col gap-4">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-lg text-foreground py-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
-            <Button variant="hero" className="mt-4" asChild>
-              <a href="#demo" onClick={() => setMobileMenuOpen(false)}>
-                Request demo
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </a>
+            {navLinks.map((link) => 
+              link.isAnchor ? (
+                <a
+                  key={link.href}
+                  href={`/${link.href}`}
+                  className={`text-lg text-foreground py-2`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setMobileMenuOpen(false);
+                    if (isHomePage) {
+                      setTimeout(() => {
+                        const element = document.querySelector(link.href);
+                        element?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    } else {
+                      navigate('/');
+                      setTimeout(() => {
+                        const element = document.querySelector(link.href);
+                        element?.scrollIntoView({ behavior: 'smooth' });
+                      }, 150);
+                    }
+                  }}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`text-lg text-foreground py-2 ${location.pathname === link.href ? 'text-primary' : ''}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
+            <Button 
+              variant="hero" 
+              className="mt-4"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (isHomePage) {
+                  setTimeout(() => {
+                    const element = document.querySelector('#contact');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                } else {
+                  navigate('/');
+                  setTimeout(() => {
+                    const element = document.querySelector('#contact');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }, 150);
+                }
+              }}
+            >
+              Contact Us
+              <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>
         </div>

@@ -3,66 +3,21 @@ const Footer = () => {
 
   return (
     <footer
-      className="section-padding py-12 border-t border-border"
+      className="py-6 border-t border-border"
       role="contentinfo"
     >
-      <div className="container-wide">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          
-          {/* Logo, copyright, contact */}
-          <div>
-            <p className="text-lg font-semibold text-foreground mb-2">
-              MINML
-            </p>
-            <p className="text-sm text-muted-foreground">
-              © {currentYear} MINML. All rights reserved.
-            </p>
+      <div className="container mx-auto px-6 md:px-8 lg:px-12 max-w-7xl">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+          <p>© {currentYear} MINML LTD. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <span>Cambridge, CB2 3EA</span>
             <a
               href="mailto:founders@minml.co.uk"
-              className="mt-2 block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="hover:text-foreground transition-colors"
             >
               founders@minml.co.uk
             </a>
           </div>
-
-          {/* Links */}
-          <nav aria-label="Footer navigation">
-            <ul className="flex flex-wrap gap-6 text-sm">
-              <li>
-                <a
-                  href="#platform"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Platform
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#how-it-works"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  How It Works
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#about"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  About
-                </a>
-              </li>
-              <li>
-                <a
-                  href="mailto:founders@minml.co.uk"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </nav>
-
         </div>
       </div>
     </footer>

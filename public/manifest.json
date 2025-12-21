@@ -8,7 +8,7 @@
   "theme_color": "#1a1a1a",
   "icons": [
     {
-      "src": "/favicon.ico",
+      "src": "/favicon-minml.ico",
       "sizes": "48x48",
       "type": "image/x-icon"
     },
@@ -20,4 +20,3 @@
     }
   ]
 }
-
