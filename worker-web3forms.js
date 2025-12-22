@@ -1,5 +1,5 @@
-// Cloudflare Worker for MINML
-// Handles API routes and serves static assets
+// Cloudflare Worker for MINML - Using Web3Forms (simpler, no domain verification needed)
+// To use this: Replace worker.js with this file and set WEB3FORMS_ACCESS_KEY environment variable
 
 export default {
   async fetch(request, env) {
@@ -7,7 +7,7 @@ export default {
 
     // Handle contact form API endpoint
     if (url.pathname === '/api/contact' && request.method === 'POST') {
-      return handleContactForm(request);
+      return handleContactFormWeb3Forms(request, env);
     }
 
     // Handle test endpoint
@@ -15,7 +15,7 @@ export default {
       return new Response(
         JSON.stringify({
           status: "ok",
-          message: "Cloudflare Worker is working with Web3Forms!",
+          message: "Cloudflare Worker is working! (Web3Forms version)",
           timestamp: new Date().toISOString()
         }),
         {
@@ -40,12 +40,11 @@ export default {
     }
 
     // For all other requests, serve static assets
-    // The Workers Assets feature will handle this automatically
     return env.ASSETS.fetch(request);
   },
 };
 
-async function handleContactForm(request) {
+async function handleContactFormWeb3Forms(request, env) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -90,9 +89,23 @@ async function handleContactForm(request) {
       );
     }
 
-    // Send email using Web3Forms API
+    // Check for Web3Forms access key
+    if (!env.WEB3FORMS_ACCESS_KEY) {
+      return new Response(
+        JSON.stringify({
+          error: "Email service not configured",
+          details: "WEB3FORMS_ACCESS_KEY environment variable not set. See documentation for setup."
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // Send email via Web3Forms
     const web3FormsData = new FormData();
-    web3FormsData.append('access_key', '88237996-884d-4046-8376-269454520ddc');
+    web3FormsData.append('access_key', env.WEB3FORMS_ACCESS_KEY);
     web3FormsData.append('name', formData.name);
     web3FormsData.append('email', formData.email);
     web3FormsData.append('subject', `MINML Contact Form - ${formData.company || formData.name}`);
@@ -103,6 +116,7 @@ Message:
 ${formData.message}
     `.trim());
     web3FormsData.append('from_name', 'MINML Contact Form');
+    web3FormsData.append('redirect', 'https://web3forms.com/success');
 
     const emailResponse = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
