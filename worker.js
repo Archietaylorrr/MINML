@@ -1,5 +1,51 @@
-// JavaScript version of contact function (fallback if TypeScript has issues)
-export async function onRequestPost(context) {
+// Cloudflare Worker for MINML
+// Handles API routes and serves static assets
+
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+
+    // Handle contact form API endpoint
+    if (url.pathname === '/api/contact' && request.method === 'POST') {
+      return handleContactForm(request);
+    }
+
+    // Handle test endpoint
+    if (url.pathname === '/api/test' && request.method === 'GET') {
+      return new Response(
+        JSON.stringify({
+          status: "ok",
+          message: "Cloudflare Worker is working!",
+          timestamp: new Date().toISOString()
+        }),
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
+    }
+
+    // Handle CORS preflight
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      });
+    }
+
+    // For all other requests, serve static assets
+    // The Workers Assets feature will handle this automatically
+    return env.ASSETS.fetch(request);
+  },
+};
+
+async function handleContactForm(request) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -10,7 +56,7 @@ export async function onRequestPost(context) {
     // Parse the form data
     let formData;
     try {
-      formData = await context.request.json();
+      formData = await request.json();
     } catch (parseError) {
       return new Response(
         JSON.stringify({ error: "Invalid request body" }),
@@ -86,8 +132,7 @@ Sent from MINML Contact Form`,
             },
             {
               type: "text/html",
-              value: `
-<!DOCTYPE html>
+              value: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -116,16 +161,12 @@ Sent from MINML Contact Form`,
         <div class="label">Email:</div>
         <div class="value"><a href="mailto:${formData.email}">${formData.email}</a></div>
       </div>
-      ${
-        formData.company
-          ? `
+      ${formData.company ? `
       <div class="field">
         <div class="label">Company:</div>
         <div class="value">${formData.company}</div>
       </div>
-      `
-          : ""
-      }
+      ` : ""}
       <div class="field">
         <div class="label">Message:</div>
         <div class="message-box">${formData.message.replace(/\n/g, "<br>")}</div>
@@ -174,15 +215,4 @@ Sent from MINML Contact Form`,
       }
     );
   }
-}
-
-// Handle OPTIONS request for CORS
-export async function onRequestOptions() {
-  return new Response(null, {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-    },
-  });
 }
