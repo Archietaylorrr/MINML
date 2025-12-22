@@ -91,22 +91,19 @@ async function handleContactForm(request) {
     }
 
     // Send email using Web3Forms API
-    const web3FormsData = new FormData();
-    web3FormsData.append('access_key', '88237996-884d-4046-8376-269454520ddc');
-    web3FormsData.append('name', formData.name);
-    web3FormsData.append('email', formData.email);
-    web3FormsData.append('subject', `MINML Contact Form - ${formData.company || formData.name}`);
-    web3FormsData.append('message', `
-Company: ${formData.company || 'Not provided'}
-
-Message:
-${formData.message}
-    `.trim());
-    web3FormsData.append('from_name', 'MINML Contact Form');
-
     const emailResponse = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
-      body: web3FormsData
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        access_key: '88237996-884d-4046-8376-269454520ddc',
+        name: formData.name,
+        email: formData.email,
+        subject: `MINML Contact Form - ${formData.company || formData.name}`,
+        message: `Company: ${formData.company || 'Not provided'}\n\nMessage:\n${formData.message}`,
+        from_name: 'MINML Contact Form',
+      })
     });
 
     const result = await emailResponse.json();
