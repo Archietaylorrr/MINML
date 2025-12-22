@@ -95,6 +95,7 @@ async function handleContactForm(request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json",
       },
       body: JSON.stringify({
         access_key: '88237996-884d-4046-8376-269454520ddc',
