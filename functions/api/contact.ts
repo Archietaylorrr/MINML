@@ -7,9 +7,27 @@ interface ContactFormData {
 }
 
 export async function onRequestPost(context: any) {
+  // Add CORS headers to all responses
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+
   try {
     // Parse the form data
-    const formData: ContactFormData = await context.request.json();
+    let formData: ContactFormData;
+    try {
+      formData = await context.request.json();
+    } catch (parseError) {
+      return new Response(
+        JSON.stringify({ error: "Invalid request body" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
 
     // Validate required fields
     if (!formData.name || !formData.email || !formData.message) {
@@ -17,7 +35,7 @@ export async function onRequestPost(context: any) {
         JSON.stringify({ error: "Missing required fields" }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...corsHeaders },
         }
       );
     }
@@ -29,7 +47,7 @@ export async function onRequestPost(context: any) {
         JSON.stringify({ error: "Invalid email address" }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...corsHeaders },
         }
       );
     }
@@ -148,7 +166,7 @@ Sent from MINML Contact Form`,
         status: 200,
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          ...corsHeaders,
         },
       }
     );
@@ -160,7 +178,7 @@ Sent from MINML Contact Form`,
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...corsHeaders },
       }
     );
   }

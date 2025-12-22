@@ -41,10 +41,24 @@ const CTA = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      // Check if response has content before parsing JSON
+      const contentType = response.headers.get("content-type");
+      let data;
+
+      if (contentType && contentType.includes("application/json")) {
+        const text = await response.text();
+        if (text) {
+          data = JSON.parse(text);
+        } else {
+          data = {};
+        }
+      } else {
+        // If not JSON, treat as error
+        throw new Error("Invalid response from server. The contact form may not be properly configured.");
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to send message");
+        throw new Error(data.error || `Server error: ${response.status}`);
       }
 
       setSubmitStatus({
@@ -60,6 +74,7 @@ const CTA = () => {
         message: "",
       });
     } catch (error) {
+      console.error("Contact form error:", error);
       setSubmitStatus({
         type: "error",
         message:
