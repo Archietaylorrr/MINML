@@ -106,14 +106,34 @@ async function handleContactForm(request) {
       })
     });
 
-    const result = await emailResponse.json();
+    // Parse response safely
+    let result;
+    try {
+      const responseText = await emailResponse.text();
+      console.log("Web3Forms raw response:", responseText);
+      console.log("Web3Forms status:", emailResponse.status);
+      result = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error("Failed to parse Web3Forms response:", parseError);
+      return new Response(
+        JSON.stringify({
+          error: "Email service error",
+          details: `Invalid response from email service (status: ${emailResponse.status})`
+        }),
+        {
+          status: 502,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
 
     if (!emailResponse.ok || !result.success) {
       console.error("Web3Forms error:", result);
       return new Response(
         JSON.stringify({
           error: "Email service error",
-          details: result.message || "Failed to send email"
+          details: result.message || "Failed to send email",
+          debug: result
         }),
         {
           status: 502,
