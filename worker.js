@@ -15,7 +15,7 @@ export default {
       return new Response(
         JSON.stringify({
           status: "ok",
-          message: "Cloudflare Worker is working!",
+          message: "Cloudflare Worker is working with Web3Forms!",
           timestamp: new Date().toISOString()
         }),
         {
@@ -90,111 +90,33 @@ async function handleContactForm(request) {
       );
     }
 
-    // Send email using MailChannels API
-    const emailResponse = await fetch(
-      "https://api.mailchannels.net/tx/v1/send",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          personalizations: [
-            {
-              to: [{ email: "founders@minml.co.uk", name: "MINML Team" }],
-              dkim_domain: "minml.co.uk",
-              dkim_selector: "mailchannels",
-            },
-          ],
-          from: {
-            email: "noreply@minml.co.uk",
-            name: "MINML Contact Form",
-          },
-          reply_to: {
-            email: formData.email,
-            name: formData.name,
-          },
-          subject: `MINML Contact Form - ${formData.company || formData.name}`,
-          content: [
-            {
-              type: "text/plain",
-              value: `New contact form submission from minml.co.uk
-
-Name: ${formData.name}
-Email: ${formData.email}
-Company: ${formData.company || "Not provided"}
+    // Send email using Web3Forms API
+    const web3FormsData = new FormData();
+    web3FormsData.append('access_key', '88237996-884d-4046-8376-269454520ddc');
+    web3FormsData.append('name', formData.name);
+    web3FormsData.append('email', formData.email);
+    web3FormsData.append('subject', `MINML Contact Form - ${formData.company || formData.name}`);
+    web3FormsData.append('message', `
+Company: ${formData.company || 'Not provided'}
 
 Message:
 ${formData.message}
+    `.trim());
+    web3FormsData.append('from_name', 'MINML Contact Form');
 
----
-Sent from MINML Contact Form`,
-            },
-            {
-              type: "text/html",
-              value: `<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-    .header { background-color: #1a2332; color: white; padding: 20px; text-align: center; }
-    .content { background-color: #f9f9f9; padding: 20px; margin-top: 20px; }
-    .field { margin-bottom: 15px; }
-    .label { font-weight: bold; color: #555; }
-    .value { margin-top: 5px; }
-    .message-box { background-color: white; padding: 15px; border-left: 4px solid #1a2332; margin-top: 10px; }
-    .footer { text-align: center; margin-top: 20px; color: #888; font-size: 12px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h2>New Contact Form Submission</h2>
-    </div>
-    <div class="content">
-      <div class="field">
-        <div class="label">Name:</div>
-        <div class="value">${formData.name}</div>
-      </div>
-      <div class="field">
-        <div class="label">Email:</div>
-        <div class="value"><a href="mailto:${formData.email}">${formData.email}</a></div>
-      </div>
-      ${formData.company ? `
-      <div class="field">
-        <div class="label">Company:</div>
-        <div class="value">${formData.company}</div>
-      </div>
-      ` : ""}
-      <div class="field">
-        <div class="label">Message:</div>
-        <div class="message-box">${formData.message.replace(/\n/g, "<br>")}</div>
-      </div>
-    </div>
-    <div class="footer">
-      Sent from MINML Contact Form (minml.co.uk)
-    </div>
-  </div>
-</body>
-</html>`,
-            },
-          ],
-        }),
-      }
-    );
+    const emailResponse = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: web3FormsData
+    });
 
-    if (!emailResponse.ok) {
-      const errorText = await emailResponse.text();
-      console.error("MailChannels error:", errorText);
-      console.error("MailChannels status:", emailResponse.status);
+    const result = await emailResponse.json();
 
-      // Return detailed error for debugging
+    if (!emailResponse.ok || !result.success) {
+      console.error("Web3Forms error:", result);
       return new Response(
         JSON.stringify({
           error: "Email service error",
-          details: `MailChannels returned ${emailResponse.status}: ${errorText}`,
-          suggestion: "MailChannels may require domain verification. Consider using Web3Forms instead (see documentation)."
+          details: result.message || "Failed to send email"
         }),
         {
           status: 502,
