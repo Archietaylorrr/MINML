@@ -111,14 +111,18 @@ async function handleContactForm(request, env) {
       from_name: 'MINML Contact Form',
     };
     // Send the request to Web3Forms
+    // Send the request to Web3Forms
     const emailResponse = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
+        "Accept": "application/json",
+        "Origin": "https://minml.co.uk",
+        "User-Agent": "MINML Contact Form (Cloudflare Worker)",
       },
       body: JSON.stringify(payload),
     });
+
     // Parse response safely
     let result;
     try {
