@@ -187,7 +187,20 @@ Sent from MINML Contact Form`,
     if (!emailResponse.ok) {
       const errorText = await emailResponse.text();
       console.error("MailChannels error:", errorText);
-      throw new Error("Failed to send email");
+      console.error("MailChannels status:", emailResponse.status);
+
+      // Return detailed error for debugging
+      return new Response(
+        JSON.stringify({
+          error: "Email service error",
+          details: `MailChannels returned ${emailResponse.status}: ${errorText}`,
+          suggestion: "MailChannels may require domain verification. Consider using Web3Forms instead (see documentation)."
+        }),
+        {
+          status: 502,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
     }
 
     return new Response(
