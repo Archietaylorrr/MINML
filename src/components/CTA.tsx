@@ -33,22 +33,23 @@ const CTA = () => {
     setSubmitStatus({ type: null, message: "" });
 
     try {
-      // Create mailto link as fallback
-      const subject = encodeURIComponent(
-        `MINML Contact Form - ${formData.company || formData.name}`
-      );
-      const body = encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company}\n\nMessage:\n${formData.message}`
-      );
-      const mailtoLink = `mailto:founders@minml.co.uk?subject=${subject}&body=${body}`;
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-      // Open mailto as the submission method
-      window.location.href = mailtoLink;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send message");
+      }
 
       setSubmitStatus({
         type: "success",
-        message:
-          "Opening your email client. If it doesn't open automatically, please email us at founders@minml.co.uk",
+        message: data.message || "Thank you for your message. We'll be in touch soon!",
       });
 
       // Reset form
@@ -61,7 +62,10 @@ const CTA = () => {
     } catch (error) {
       setSubmitStatus({
         type: "error",
-        message: "Something went wrong. Please try emailing us directly at founders@minml.co.uk",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong. Please try again or email us directly at founders@minml.co.uk",
       });
     } finally {
       setIsSubmitting(false);
