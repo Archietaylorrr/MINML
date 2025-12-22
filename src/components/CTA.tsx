@@ -33,40 +33,40 @@ const CTA = () => {
     setSubmitStatus({ type: null, message: "" });
 
     try {
-      const response = await fetch("/api/contact", {
+      const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined;
+      if (!accessKey) {
+        throw new Error(
+          "Contact form is not configured (missing VITE_WEB3FORMS_ACCESS_KEY)."
+        );
+      }
+
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          access_key: accessKey,
+          name: formData.name,
+          email: formData.email,
+          replyto: formData.email,
+          subject: `MINML Contact Form - ${formData.company || formData.name}`,
+          message: `Company: ${formData.company || "Not provided"}\n\nMessage:\n${formData.message}`,
+        }),
       });
 
-      // Check if response has content before parsing JSON
-      const contentType = response.headers.get("content-type");
-      let data;
+      const data = await response.json();
 
-      if (contentType && contentType.includes("application/json")) {
-        const text = await response.text();
-        if (text) {
-          data = JSON.parse(text);
-        } else {
-          data = {};
-        }
-      } else {
-        // If not JSON, treat as error
-        throw new Error("Invalid response from server. The contact form may not be properly configured.");
-      }
-
-      if (!response.ok) {
-        throw new Error(data.error || `Server error: ${response.status}`);
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.message || `Submission failed (${response.status})`);
       }
 
       setSubmitStatus({
         type: "success",
-        message: data.message || "Thank you for your message. We'll be in touch soon!",
+        message: "Thank you for your message. We'll be in touch soon!",
       });
 
-      // Reset form
       setFormData({
         name: "",
         email: "",
